@@ -47,8 +47,6 @@ template <uint8_t pin>
 volatile unsigned long MacroKey<pin>::last_button_time;
 template <uint8_t pin>
 volatile uint8_t MacroKey<pin>::keycode;
-template <uint8_t pin>
-volatile BleMacropad& MacroKey<pin>::pad;
 
 MacroKey<15> oneKey;
 MacroKey<21> twoKey;
@@ -95,8 +93,8 @@ void setup()
 
   bleMacropad.begin();
 
-  oneKey.begin(KEY_1_CODE, &bleMacropad);
-  twoKey.begin(KEY_2_CODE, &bleMacropad);
+  oneKey.begin(KEY_1_CODE);
+  twoKey.begin(KEY_2_CODE);
 
   rotaryEncoder.begin();
   rotaryEncoder.setup(readEncoderISR);

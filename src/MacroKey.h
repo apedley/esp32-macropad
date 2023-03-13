@@ -3,7 +3,6 @@
 #include <Arduino.h>
 #include <string>
 #include "Printable.h"
-#include "BleMacropad.h"
 
 template <uint8_t pin>
 class MacroKey : public Printable {
@@ -14,11 +13,10 @@ private:
     static volatile unsigned long button_time;  
     static volatile unsigned long last_button_time;
     static volatile uint8_t keycode;
-    static volatile BleMacropad &pad;
 
 public:
     // MacroKey(BleMacropad& pad): pad(pad) {}
-    static void begin(uint8_t code, BleMacropad& bleMacropad)
+    static void begin(uint8_t code)
     {
         buttonState - false;
         buttonCount = 0;
@@ -26,7 +24,6 @@ public:
         button_time = 0;
         last_button_time = 0;
         keycode = code;
-        pad = bleMacropad;
         pinMode(pin, INPUT_PULLUP);
         attachInterrupt(digitalPinToInterrupt(pin), pressed, FALLING);
         
