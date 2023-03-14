@@ -48,3 +48,33 @@ void KeyboardDisplay::showStatus(bool bleConnected, const char * keyOne, const c
 
     display();
 }
+
+void KeyboardDisplay::showMacroButton(MacroButton &button, const int16_t y)
+{
+    clearDisplay();
+    setTextSize(1);
+    setTextColor(SSD1306_WHITE);
+    setCursor(2, y);
+    print(button);
+    display();
+}
+
+void KeyboardDisplay::showMacroButtonsOverview(MacroButton *buttons[], size_t size)
+{
+    clearDisplay();
+    setTextSize(1);
+    setTextColor(SSD1306_WHITE);
+
+    setCursor(2, 2);
+    // Pin Code Count State
+    // 123 1234 12345 123456
+    println("Pin Code Count State");
+
+    for (int i = 0; i < size; i++)
+    {
+        setCursor(2, (i + 1) * 12 + 2);
+        print(*buttons[i]);
+    }
+    
+    display();
+}
