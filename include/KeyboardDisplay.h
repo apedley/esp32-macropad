@@ -3,7 +3,15 @@
 
 #include <Adafruit_SSD1306.h>
 #include <Wire.h>
+
 #include "MacroButton.h"
+
+// class KeyboardUI : public SSD1306Wire {
+// public:
+//     KeyboardUI(uint8_t address, int SDA, int SCL) : SSD1306Wire(address, SDA, SCL)
+//     {
+//     }
+// };
 
 class KeyboardDisplay : public Adafruit_SSD1306 {
 public:

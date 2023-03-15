@@ -42,9 +42,9 @@ KeyboardDisplay disp(128, 64, &Wire, -1);
 
 
 MacroButton buttonOne = MacroButton(KEY_1_PIN, KEY_1_CODE, 25);
-MacroButton twoButton = MacroButton(21, KEY_2_CODE, 25);
+MacroButton buttonTwo = MacroButton(21, KEY_2_CODE, 25);
 MacroButton buttonThree = MacroButton(KEY_3_PIN, KEY_3_CODE, 25);
-MacroButton *buttons[] = {&buttonOne, &twoButton, &buttonThree};
+MacroButton *buttons[] = {&buttonOne, &buttonTwo, &buttonThree};
 
 
 // void rotary_onButtonClick()
@@ -95,9 +95,8 @@ void setup()
   // rotaryEncoder.setBoundaries(0, 1000, false); // minValue, maxValue, circleValues true|false (when max go to min and vice versa)
   // rotaryEncoder.setAcceleration(250);
 
-
   buttonOne.begin();
-  twoButton.begin();
+  buttonTwo.begin();
   buttonThree.begin();
 }
 
@@ -105,7 +104,7 @@ void setup()
 void loop()
 {
   buttonOne.update();
-  twoButton.update();
+  buttonTwo.update();
   buttonThree.update();
 
 
@@ -119,7 +118,7 @@ void loop()
 
     disp.showMacroButtonsOverview(buttons, 3);
 
-    bleMacropad.volup();
+    // bleMacropad.volup();
 
     // rotary_loop();
   }
