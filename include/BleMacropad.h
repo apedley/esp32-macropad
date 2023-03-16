@@ -8,7 +8,7 @@ class KeyboardDisplay;
 class BleMacropad : public BleKeyboard {
 
     public:
-    BleMacropad() : BleKeyboard("BLE Macropad", "ESP32", 100)
+    BleMacropad() : BleKeyboard("BLE Macro Pad", "Arduino", 82)
     {
     }
 

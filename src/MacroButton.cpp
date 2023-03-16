@@ -13,25 +13,21 @@ size_t MacroButton::printTo(Print &p) const
 bool MacroButton::update()
 {
     Bounce2::Button::update();
-    if (Bounce2::Button::fell())
-    {
-        currentState = true;
+    bool fell = Bounce2::Button::fell();
+    currentState = Bounce2::Button::isPressed();
+    if (fell) {
         count++;
     }
-    else
-    {
-        currentState = false;
-    }
-    return Bounce2::Button::fell();
+    return fell;
 }
 
-MacroButton::MacroButton(uint8_t pin, uint8_t keycode, uint16_t period) : Bounce2::Button()
+MacroButton::MacroButton(uint8_t pin, uint8_t keycode, uint16_t period, String name) : Bounce2::Button()
 {
+    this->_name = name;
     this->keycode = keycode;
     this->pin = pin;
     this->period = period;
     count = 0;
-    this->currentState = false;
 }
 
 void MacroButton::begin()

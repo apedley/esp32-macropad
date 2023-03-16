@@ -6,11 +6,13 @@
 
 #include "MacroButton.h"
 
-// class KeyboardUI : public SSD1306Wire {
+// class KeyboardUI {
 // public:
-//     KeyboardUI(uint8_t address, int SDA, int SCL) : SSD1306Wire(address, SDA, SCL)
-//     {
+//     KeyboardUI() {
+        
 //     }
+// private:
+    
 // };
 
 class KeyboardDisplay : public Adafruit_SSD1306 {
@@ -21,10 +23,14 @@ public:
     }
 
     void init();
-    void test(const char * val = "init");
-    void showStatus(bool bleConnected, const char * keyOne, const char * keyTwo, long knobValue);
     void showMacroButton(MacroButton &button, const int16_t y);
-    void showMacroButtonsOverview(MacroButton *buttons[], size_t size);
+    void showOverview(MacroButton *buttons[], size_t size, bool bleConnected, long rotaryEncoderValue);
+    void drawAlert(const char *message);
+
+
+private:
+    bool _alert = false;
+    long _alertTime = 0;
 };
 
 #endif

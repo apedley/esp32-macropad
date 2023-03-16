@@ -6,25 +6,30 @@
 
 class MacroButton : public Bounce2::Button, public Printable {
     public:
-    MacroButton(uint8_t pin, uint8_t keycode, uint16_t period);
+    MacroButton(uint8_t pin, uint8_t keycode, uint16_t period, String name);
 
     void begin();
 
     bool update();
 
-    const bool pressed() const
-    {
-        return Bounce2::Button::pressed();
-    }
-
-    const bool isPressed() const
-    {
-        return Bounce2::Button::isPressed();
-    }
 
     const uint8_t getCount() const
     {
         return count;
+    }
+    const uint8_t getKeycode() const
+    {
+        return keycode;
+    }
+
+    const bool getCurrentState() const
+    {
+        return currentState;
+    }
+
+    const char* getName() const
+    {
+        return _name.c_str();
     }
 
     virtual size_t printTo(Print& p) const;
@@ -34,7 +39,10 @@ class MacroButton : public Bounce2::Button, public Printable {
     uint8_t pin;
     uint8_t count;
     uint16_t period;
-    bool currentState;
+    bool currentState = false;
+private:
+    
+    String _name;
 };
 
 #endif
