@@ -11,15 +11,15 @@ void KeyboardKnob::begin()
 {
   _value = 0;
 
-  attachHalfQuad(7, 6);
+  attachHalfQuad(_dataPin, _clockPin);
   setCount(_value);
   setFilter(1023);
 }
 
-bool KeyboardKnob::update()
+int KeyboardKnob::update()
 {
   int64_t newValue = getCount() / 2;
-  bool changed = newValue == _value;
+  int changed =  newValue - _value;
   _value = newValue;
   return changed;
 }

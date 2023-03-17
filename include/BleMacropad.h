@@ -8,8 +8,9 @@ class KeyboardDisplay;
 class BleMacropad : public BleKeyboard {
 
     public:
-    BleMacropad() : BleKeyboard("BLE Macro Pad", "Arduino", 82)
+    BleMacropad(uint32_t repeatDelay) : BleKeyboard("BLE Macro Pad", "Arduino", 82)
     {
+        this->setDelay(repeatDelay);
     }
 
     void volup();

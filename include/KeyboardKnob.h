@@ -11,7 +11,7 @@ public:
     }
 
     void begin();
-    bool update();
+    int update();
 private:
     int64_t _value;
     int _dataPin;

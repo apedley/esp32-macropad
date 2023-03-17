@@ -10,34 +10,46 @@
 
 #define DEFAULT_PERIOD 50
 
-#define KEY_1_PIN 15
-#define KEY_2_PIN 21
-#define KEY_3_PIN 34
+#define KEY_REPEAT_DELAY 3
 
-// #define KEY_1_CODE 0xCE // PrintScreen
-// #define KEY_1_CODE KEY_MEDIA_VOLUME_DOWN
+// #define KEY_1_PIN 15
+// #define KEY_2_PIN 21
+// #define KEY_3_PIN 34
+
+#define KEY_1_PIN 23
+#define KEY_2_PIN 5
+#define KEY_3_PIN 25
+#define KEY_4_PIN 17
+#define KEY_5_PIN 16
+#define KEY_6_PIN 4
+
 #define KEY_1_CODE KEY_NUM_MINUS
 #define KEY_2_CODE KEY_NUM_PLUS
 #define KEY_3_CODE KEY_NUM_SLASH
-// #define KEY_2_CODE 0xF1 // F14
-// #define KEY_2_CODE KEY_MEDIA_VOLUME_UP
-// #define KEY_3_CODE 0xF2 // F13
-// #define KEY_3_CODE KEY_MEDIA_VOLUME_MUTE
+#define KEY_4_CODE KEY_NUM_ASTERISK
+#define KEY_5_CODE KEY_NUM_PERIOD
+#define KEY_6_CODE KEY_F13
 
-#define ROTARY_DATA_PIN 7
-#define ROTARY_CLOCK_PIN 6
+// #define ROTARY_DATA_PIN 7
+// #define ROTARY_CLOCK_PIN 6
 
-BleMacropad bleMacropad;
+#define ROTARY_CLOCK_PIN 19
+#define ROTARY_DATA_PIN 18
 
-// U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, /* clock=*/ 9, /* data=*/ 8, /* reset=*/ U8X8_PIN_NONE);
+BleMacropad bleMacropad(KEY_REPEAT_DELAY);
+
 KeyboardDisplay disp(128, 64, &Wire, -1);
 
 MacroButton buttonOne = MacroButton(KEY_1_PIN, KEY_1_CODE, 25, "-");
 MacroButton buttonTwo = MacroButton(KEY_2_PIN, KEY_2_CODE, 25, "+");
 MacroButton buttonThree = MacroButton(KEY_3_PIN, KEY_3_CODE, 25, "/");
+MacroButton buttonFour = MacroButton(KEY_4_PIN, KEY_4_CODE, 25, "*");
+MacroButton buttonFive = MacroButton(KEY_5_PIN, KEY_5_CODE, 25, ".");
+MacroButton buttonSix = MacroButton(KEY_6_PIN, KEY_6_CODE, 25, "F13");
 
-MacroButton *buttons[] = {&buttonOne, &buttonTwo, &buttonThree};
-uint8_t buttonsCount = 3;
+MacroButton *buttons[] = {&buttonOne, &buttonTwo, &buttonThree, &buttonFour, &buttonFive, &buttonSix};
+// MacroButton *buttons[] = {&buttonOne, &buttonTwo};
+uint8_t buttonsCount = 6;
 
 int64_t rotaryEncoderValue = 0;
 KeyboardKnob knob(ROTARY_DATA_PIN, ROTARY_CLOCK_PIN);
@@ -69,11 +81,32 @@ void setup()
 void loop()
 {
   bool connected = bleMacropad.isConnected();
-  
-  // rotaryEncoderValue = encoder.getCount() / 2;
 
-  if (knob.update()) {
+  if (!connected) {
+    disp.drawImage(cableIcon_bits, cableIcon_width, cableIcon_height);
+    return;
+  }
+
+  char alertMessage[80];
+
+  int knobChange = knob.update();
+
+  if (knobChange != 0) {
     rotaryEncoderValue = knob.getValue();
+
+    if (knobChange > 0) {
+      bleMacropad.write(KEY_MEDIA_VOLUME_UP);
+      snprintf(alertMessage, 80, "VOL UP");
+    } else {
+      bleMacropad.write(KEY_MEDIA_VOLUME_DOWN);
+      snprintf(alertMessage, 80, "VOL DOWN");
+    }
+
+    
+    if (!showAlert) {
+      showAlert = true;
+      lastAlertTime = millis();
+    }
   }
 
   char keyMessage[80];
@@ -84,11 +117,11 @@ void loop()
     {
       if (connected) {
         uint8_t keycode = button->getKeycode();
-        Serial.printf("Sending Key.. %d\n", button->getName());
-        snprintf(keyMessage, 80, "Send %s", button->getName());
+        snprintf(alertMessage, 80, "Send %s", button->getName());
+
         bleMacropad.write(keycode);
 
-        if (!showAlert) {//+-+-+-+++-+-
+        if (!showAlert) {
           showAlert = true;
           lastAlertTime = millis();
         }
@@ -101,9 +134,9 @@ void loop()
       showAlert = false;
     }
 
-    disp.drawAlert(keyMessage);
+    disp.drawAlert(alertMessage);
   } else {
-      disp.showOverview(buttons, buttonsCount, connected, rotaryEncoderValue);
+    disp.showOverview(buttons, buttonsCount, connected, rotaryEncoderValue);
   }
 
 
@@ -111,6 +144,5 @@ void loop()
   {
 
     time_now = millis();
-    // Serial.println(rotaryEncoderValue);
   }
 }

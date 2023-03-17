@@ -5,7 +5,7 @@
 #include "Printable.h"
 
 class MacroButton : public Bounce2::Button, public Printable {
-    public:
+public:
     MacroButton(uint8_t pin, uint8_t keycode, uint16_t period, String name);
 
     void begin();
@@ -34,7 +34,7 @@ class MacroButton : public Bounce2::Button, public Printable {
 
     virtual size_t printTo(Print& p) const;
 
-    protected:
+protected:
     uint8_t keycode;
     uint8_t pin;
     uint8_t count;
