@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <U8g2lib.h>
 #include "Bounce2.h"
 #include "KeyboardKnob.h"
 #include "KeyboardDisplay.h"
@@ -36,7 +35,7 @@
 #define ROTARY_CLOCK_PIN 19
 #define ROTARY_DATA_PIN 18
 
-BleMacropad bleMacropad(KEY_REPEAT_DELAY);
+BleMacropad bleMacropad;
 
 KeyboardDisplay disp(128, 64, &Wire, -1);
 
@@ -48,7 +47,7 @@ MacroButton buttonFive = MacroButton(KEY_5_PIN, KEY_5_CODE, 25, ".");
 MacroButton buttonSix = MacroButton(KEY_6_PIN, KEY_6_CODE, 25, "F13");
 
 MacroButton *buttons[] = {&buttonOne, &buttonTwo, &buttonThree, &buttonFour, &buttonFive, &buttonSix};
-// MacroButton *buttons[] = {&buttonOne, &buttonTwo};
+
 uint8_t buttonsCount = 6;
 
 int64_t rotaryEncoderValue = 0;
@@ -59,6 +58,7 @@ unsigned long time_now = 0;
 bool showAlert = false;
 long lastAlertTime = 0;
 
+// cppcheck-suppress unusedFunction
 void setup()
 {
 
@@ -77,7 +77,7 @@ void setup()
 
 }
 
-
+// cppcheck-suppress unusedFunction
 void loop()
 {
   bool connected = bleMacropad.isConnected();
@@ -109,22 +109,18 @@ void loop()
     }
   }
 
-  char keyMessage[80];
-
   for (MacroButton *button : buttons)
   {
     if (button->update())
     {
-      if (connected) {
-        uint8_t keycode = button->getKeycode();
-        snprintf(alertMessage, 80, "Send %s", button->getName());
+      uint8_t keycode = button->getKeycode();
+      snprintf(alertMessage, 80, "Send %s", button->getName());
 
-        bleMacropad.write(keycode);
+      bleMacropad.write(keycode);
 
-        if (!showAlert) {
-          showAlert = true;
-          lastAlertTime = millis();
-        }
+      if (!showAlert) {
+        showAlert = true;
+        lastAlertTime = millis();
       }
     }
   }
@@ -136,7 +132,7 @@ void loop()
 
     disp.drawAlert(alertMessage);
   } else {
-    disp.showOverview(buttons, buttonsCount, connected, rotaryEncoderValue);
+    disp.showOverview(buttons, buttonsCount);
   }
 
 

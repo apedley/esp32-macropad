@@ -24,7 +24,7 @@ public:
 
     void init();
     void showMacroButton(MacroButton &button, const int16_t y);
-    void showOverview(MacroButton *buttons[], size_t size, bool bleConnected, long rotaryEncoderValue);
+    void showOverview(MacroButton *buttons[], size_t size);
     void drawAlert(const char *message);
     void drawImage(const uint8_t *image, const int16_t w, const int16_t h);
 

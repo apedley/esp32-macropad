@@ -7,14 +7,12 @@ class KeyboardDisplay;
 
 class BleMacropad : public BleKeyboard {
 
-    public:
-    BleMacropad(uint32_t repeatDelay) : BleKeyboard("BLE Macro Pad", "Arduino", 82)
+    public: 
+    BleMacropad(uint32_t repeatDelay = 3, uint8_t batteryLevel = 100) 
+        : BleKeyboard("Macropad", "ESP32", batteryLevel)
     {
         this->setDelay(repeatDelay);
     }
-
-    void volup();
-    void voldown();
 
 };
 #endif

@@ -3,14 +3,13 @@
 
 KeyboardKnob::KeyboardKnob(int data, int clock) : ESP32Encoder()
 {
+  _value = 0;
   _dataPin = data;
   _clockPin = clock;
 }
 
 void KeyboardKnob::begin()
 {
-  _value = 0;
-
   attachHalfQuad(_dataPin, _clockPin);
   setCount(_value);
   setFilter(1023);

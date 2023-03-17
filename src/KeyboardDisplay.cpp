@@ -20,23 +20,18 @@ void KeyboardDisplay::showMacroButton(MacroButton &button, const int16_t y)
 }
 
 
-void KeyboardDisplay::showOverview(MacroButton *buttons[], size_t size, bool bleConnected, long rotaryEncoderValue)
+void KeyboardDisplay::showOverview(MacroButton *buttons[], size_t size)
 {
     clearDisplay();
     setTextSize(1);
     setTextColor(SSD1306_WHITE);
 
-    setCursor(2, 2);
-    printf("BLE: %s R: %d", bleConnected ? "Yes" : "No", rotaryEncoderValue);
-
-    // setCursor(2, 20);
-    // Pin Code Count State
     // println("Pin Code Count State");
     // 123 1234 12345 123456
-
+    
     for (int i = 0; i < size; i++)
     {
-        setCursor(2, (i + 1) * 10 + 2);
+        setCursor(0, i * 10 + 2);
         print(*buttons[i]);
     }
     

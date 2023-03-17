@@ -1,14 +1,14 @@
 #include "MacroButton.h"
 
+
 size_t MacroButton::printTo(Print &p) const
 {
-    char buff[280];
+    char buff[22];
     // snprintf(buff, sizeof(buff), "pin: %d, keycode: %d, period: %d, count: %d, state: %s", pin, keycode, period, count, isPressed() ? "true" : "false");
     // snprintf(buff, sizeof(buff), "P%d, CT: %d, %s", pin, count, isPressed() ? "ON" : "OFF");
-    snprintf(buff, sizeof(buff), "%03d 0x%02x %05d %s", pin, keycode, count, isPressed() ? "ON" : "OFF");
+    snprintf(buff, sizeof(buff), "%s %02d 0x%02x %03d %s", _name, pin, keycode, count, isPressed() ? "ON" : "OFF");
     return p.print(buff);
 }
-
 
 bool MacroButton::update()
 {
