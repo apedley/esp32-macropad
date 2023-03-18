@@ -56,6 +56,8 @@ long timeNow = 0;
 void setup()
 {
   Serial.begin(9600);
+  Serial.println("Starting up...");
+
   disp.init();
 
   bleMacropad.begin();
@@ -74,7 +76,7 @@ void loop()
   bool connected = bleMacropad.isConnected();
 
   if (!connected) {
-    disp.drawImage(bluetooth_bits, bluetooth_width, bluetooth_height);
+    disp.drawImage(bluetooth_bits, icon_width, icon_height);
     return;
   }
 
@@ -87,10 +89,10 @@ void loop()
 
     if (knobChange > 0) {
       bleMacropad.write(KEY_MEDIA_VOLUME_UP);
-      snprintf(alertMessage, 80, "VOL UP");
+      disp.drawImage(volume_up_bits, icon_width, icon_height);
     } else {
       bleMacropad.write(KEY_MEDIA_VOLUME_DOWN);
-      snprintf(alertMessage, 80, "VOL DOWN");
+      disp.drawImage(volume_down_bits, icon_width, icon_height);
     }
 
     
@@ -106,6 +108,7 @@ void loop()
     {
       uint8_t keycode = button->getKeycode();
       snprintf(alertMessage, 80, "Send %s", button->getName());
+      disp.drawAlert(alertMessage);
 
       bleMacropad.write(keycode);
 
@@ -120,8 +123,6 @@ void loop()
     if (millis() - lastAlertTime > 1000) {
       showAlert = false;
     }
-
-    disp.drawAlert(alertMessage);
   } else {
     disp.showOverview(buttons, buttonsCount);
   }
@@ -129,4 +130,5 @@ void loop()
   if (millis() - timeNow > DEFAULT_PERIOD) {
     timeNow = millis();
   }
+  
 }

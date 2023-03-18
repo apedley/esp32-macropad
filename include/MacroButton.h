@@ -6,7 +6,7 @@
 
 class MacroButton : public Bounce2::Button, public Printable {
 public:
-    MacroButton(uint8_t pin, uint8_t keycode, uint16_t period, String name);
+    MacroButton(uint8_t pin, uint8_t keycode, uint16_t period, const char* name);
 
     void begin();
 
@@ -29,7 +29,7 @@ public:
 
     const char* getName() const
     {
-        return _name.c_str();
+        return _name;
     }
     
     virtual size_t printTo(Print& p) const;
@@ -41,8 +41,7 @@ protected:
     uint16_t period;
     bool currentState = false;
 private:
-    
-    String _name;
+    const char* _name;
 };
 
 #endif

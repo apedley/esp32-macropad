@@ -21,9 +21,8 @@ bool MacroButton::update()
     return fell;
 }
 
-MacroButton::MacroButton(uint8_t pin, uint8_t keycode, uint16_t period, String name) : Bounce2::Button()
+MacroButton::MacroButton(uint8_t pin, uint8_t keycode, uint16_t period, const char* name) : Bounce2::Button(), _name(name)
 {
-    this->_name = name;
     this->keycode = keycode;
     this->pin = pin;
     this->period = period;
