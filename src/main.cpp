@@ -7,13 +7,9 @@
 #include "MacroButton.h"
 #include "Images.h"
 
-#define DEFAULT_PERIOD 50
+#define DEFAULT_PERIOD 500
 
 #define KEY_REPEAT_DELAY 3
-
-// #define KEY_1_PIN 15
-// #define KEY_2_PIN 21
-// #define KEY_3_PIN 34
 
 #define KEY_1_PIN 23
 #define KEY_2_PIN 5
@@ -28,9 +24,6 @@
 #define KEY_4_CODE KEY_NUM_ASTERISK
 #define KEY_5_CODE KEY_NUM_PERIOD
 #define KEY_6_CODE KEY_F13
-
-// #define ROTARY_DATA_PIN 7
-// #define ROTARY_CLOCK_PIN 6
 
 #define ROTARY_CLOCK_PIN 19
 #define ROTARY_DATA_PIN 18
@@ -53,17 +46,16 @@ uint8_t buttonsCount = 6;
 int64_t rotaryEncoderValue = 0;
 KeyboardKnob knob(ROTARY_DATA_PIN, ROTARY_CLOCK_PIN);
 
-unsigned long time_now = 0;
-
 bool showAlert = false;
 long lastAlertTime = 0;
+
+long timeNow = 0;
+
 
 // cppcheck-suppress unusedFunction
 void setup()
 {
-
   Serial.begin(9600);
-
   disp.init();
 
   bleMacropad.begin();
@@ -74,7 +66,6 @@ void setup()
   {
     button->begin();
   }
-
 }
 
 // cppcheck-suppress unusedFunction
@@ -83,7 +74,7 @@ void loop()
   bool connected = bleMacropad.isConnected();
 
   if (!connected) {
-    disp.drawImage(cableIcon_bits, cableIcon_width, cableIcon_height);
+    disp.drawImage(bluetooth_bits, bluetooth_width, bluetooth_height);
     return;
   }
 
@@ -135,10 +126,7 @@ void loop()
     disp.showOverview(buttons, buttonsCount);
   }
 
-
-  if (millis() - time_now > DEFAULT_PERIOD)
-  {
-
-    time_now = millis();
+  if (millis() - timeNow > DEFAULT_PERIOD) {
+    timeNow = millis();
   }
 }
